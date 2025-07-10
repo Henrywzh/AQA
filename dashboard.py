@@ -30,6 +30,8 @@ app.layout = dmc.MantineProvider(
 
         dcc.Graph(id="ebitda-pie-chart"),
 
+        html.Div(id="download-link-container"),
+
         html.A(
             dmc.Button("Download CSV", color="gray", variant="outline"),
             href="http://127.0.0.1:5000/DownloadCSV",
@@ -63,6 +65,25 @@ def update_pie_chart(selected_sectors):
     fig.update_layout(title="EBITDA Contribution by Sector")
 
     return fig
+
+@app.callback(
+    Output("download-link-container", "children"),
+    Input("sector-selector", "value")
+)
+def update_download_link(selected_sectors):
+    if not selected_sectors:
+        return html.Div()
+
+    # Build the download URL
+    base_url = "http://127.0.0.1:5000/DownloadFilteredCSV"
+    query = "&".join([f"Sector={sector}" for sector in selected_sectors])
+    full_url = f"{base_url}?{query}"
+
+    return html.A(
+        dmc.Button("Download Filtered CSV", color="gray", variant="outline"),
+        href=full_url,
+        target="_blank"
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

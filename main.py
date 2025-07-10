@@ -1,3 +1,4 @@
+import io
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import pandas as pd
@@ -31,6 +32,30 @@ def download_csv():
         mimetype='text/csv',
         as_attachment=True,
         download_name='s&p500_data.csv'
+    )
+
+@app.route('/DownloadFilteredCSV')
+def download_filtered_csv():
+    sectors = request.args.getlist('Sector')
+    if not sectors:
+        return {"error": "No sectors provided"}, 400
+
+    filtered_df = df[df['Sector'].isin(sectors)]
+
+    if filtered_df.empty:
+        print("No data matched the selected sectors.")
+        return {"error": "No data available for selected sectors"}, 400
+
+    # Save to a buffer (instead of a file)
+    buffer = io.BytesIO()
+    filtered_df.to_csv(buffer, index=False)
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        mimetype='text/csv',
+        as_attachment=True,
+        download_name="filtered_sectors.csv"
     )
 
 if __name__ == '__main__':
