@@ -22,13 +22,19 @@ app.layout = dmc.MantineProvider(
             id="sector-selector",
             label="Select Sectors:",
             data=_sectors,
-            value=["Technology"],
+            value=_sectors,
             placeholder="Choose sectors...",
             clearable=True,
             searchable=True,
         ),
 
-        dcc.Graph(id="ebitda-pie-chart")
+        dcc.Graph(id="ebitda-pie-chart"),
+
+        html.A(
+            dmc.Button("Download CSV", color="gray", variant="outline"),
+            href="http://127.0.0.1:5000/DownloadCSV",
+            target="_blank"
+        )
     ]
 )
 

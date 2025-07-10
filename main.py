@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import pandas as pd
 
@@ -23,6 +23,15 @@ def get_ebitda():
     res = df[df['Sector'] == sector]['EBITDA'].dropna().tolist()
 
     return jsonify(res)
+
+@app.route('/DownloadCSV')
+def download_csv():
+    return send_file(
+        "constituents-financials_csv.csv",
+        mimetype='text/csv',
+        as_attachment=True,
+        download_name='s&p500_data.csv'
+    )
 
 if __name__ == '__main__':
     main()
