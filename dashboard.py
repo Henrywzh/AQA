@@ -74,7 +74,6 @@ def update_download_link(selected_sectors):
     if not selected_sectors:
         return html.Div()
 
-    # Build the download URL
     base_url = "http://127.0.0.1:5000/DownloadFilteredCSV"
     query = "&".join([f"Sector={sector}" for sector in selected_sectors])
     full_url = f"{base_url}?{query}"

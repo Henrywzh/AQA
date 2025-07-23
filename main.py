@@ -46,7 +46,6 @@ def download_filtered_csv():
         print("No data matched the selected sectors.")
         return {"error": "No data available for selected sectors"}, 400
 
-    # Save to a buffer (instead of a file)
     buffer = io.BytesIO()
     filtered_df.to_csv(buffer, index=False)
     buffer.seek(0)
